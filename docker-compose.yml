@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  flask:
+    container_name: python-flask
+    build: .
+    command: sh -c "env FLASK_APP=run.py python -m flask run --host=0.0.0.0 --port=5000"
+    ports:
+      - "5000:5000"
+    environment:
+      - ENGINE=postgresql://db_user:db_password@database:5432/db_name
+      - PYTHONUNBUFFERED=1
+      - SMSAERO_EMAIL=zahardimidov211@gmail.com
+      - SMSAERO_API_KEY=XXX
+      - SMS_ON=0
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13.3
+    container_name: database
+
+    environment:
+      POSTGRES_DB: db_name
+
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+    ports:
+      - "5432:5432"
